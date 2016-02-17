@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Buzzword Bingo</title>
+    <script type="text/javascript" src="out/bingo.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="elm-app-goes-here"></div>
+</body>
+
+<script type="text/javascript">
+    var div = document.getElementById("elm-app-goes-here");
+    //var app = Elm.fullscreen(Elm.Bingo);
+    Elm.embed(Elm.Bingo, div);
+</script>
+
+</html>
