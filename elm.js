@@ -10010,6 +10010,10 @@ Elm.Bingo.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $String = Elm.String.make(_elm);
    var _op = {};
-   var main = $Html.text($String.toUpper("bingo"));
-   return _elm.Bingo.values = {_op: _op,main: main};
+   var title = F2(function (message,times) {
+      var go = 100;
+      return $Html.text($String.trimRight($String.reverse(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message," "))))));
+   });
+   var main = A2(title,"bingo",3);
+   return _elm.Bingo.values = {_op: _op,title: title,main: main};
 };
