@@ -6,7 +6,6 @@ import Html.Events exposing (..)
 import String exposing (toUpper, repeat, trimRight)
 import StartApp.Simple as StartApp
 
-
 -- MODEL
 entryItem entry =
     li [ ]
@@ -48,6 +47,7 @@ title message times =
       |> trimRight
       |> text
 
+
 pageHeader = h1 [] [ title "bingo!" 3 ]
 
 pageFooter =
@@ -71,9 +71,6 @@ main =
     |> update Sort
     |> view
   -}
-
   StartApp.start
     { model = initialModel, view = view, update = update }
-
-
 
