@@ -5,9 +5,6 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import String exposing (toUpper, repeat, trimRight)
 
-t
-
-
 -- MODEL
 entryItem entry =
     li [ ]
@@ -28,8 +25,20 @@ initialModel =
           newEntry "Future-Proof" 100 4,
           newEntry "Rock-Start Ninja" 400 4 ]}
 
+-- UPDATE
+type Action
+    = NoOp
+    | Sort
+
+update action model =
+    case action of
+        NoOp ->
+            model
+        Sort ->
+            { model | entries = List.sortBy .points model.entries }
+
 -- VIEW
-itle message times =
+title message times =
   let go = 100 in
     message
       ++ "  "
@@ -45,13 +54,13 @@ pageFooter =
     []
     [ a [ href "https://google.com" ]
         [ text "Jannine Weigel" ]]
-view =
+view model =
   div [ id "container" ]
-    [ pageHeader, entryList initialModel.entries , pageFooter ]
+    [ pageHeader, entryList model.entries , pageFooter ]
 
 -- WIRE IT ALL TOGATHER
 main =
-  view
+  view (update Sort initialModel)
 
 
 

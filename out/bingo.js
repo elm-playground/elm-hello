@@ -10302,6 +10302,24 @@ Elm.Bingo.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $String = Elm.String.make(_elm);
    var _op = {};
+   var pageFooter = A2($Html.footer,
+   _U.list([]),
+   _U.list([A2($Html.a,_U.list([$Html$Attributes.href("https://google.com")]),_U.list([$Html.text("Jannine Weigel")]))]));
+   var title = F2(function (message,times) {
+      var go = 100;
+      return $Html.text($String.trimRight(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message,"  ")))));
+   });
+   var pageHeader = A2($Html.h1,_U.list([]),_U.list([A2(title,"bingo!",3)]));
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      if (_p0.ctor === "NoOp") {
+            return model;
+         } else {
+            return _U.update(model,{entries: A2($List.sortBy,function (_) {    return _.points;},model.entries)});
+         }
+   });
+   var Sort = {ctor: "Sort"};
+   var NoOp = {ctor: "NoOp"};
    var newEntry = F3(function (phrase,points,id) {    return {phrase: phrase,points: points,spoken: false,id: id};});
    var initialModel = {entries: _U.list([A3(newEntry,"Doing Agile",200,2)
                                         ,A3(newEntry,"In The Cloud",300,3)
@@ -10314,24 +10332,21 @@ Elm.Bingo.make = function (_elm) {
               ,A2($Html.span,_U.list([$Html$Attributes.$class("points")]),_U.list([$Html.text($Basics.toString(entry.points))]))]));
    };
    var entryList = function (entries) {    return A2($Html.ul,_U.list([]),A2($List.map,entryItem,entries));};
-   var pageFooter = A2($Html.footer,
-   _U.list([]),
-   _U.list([A2($Html.a,_U.list([$Html$Attributes.href("https://google.com")]),_U.list([$Html.text("Jannine Weigel")]))]));
-   var title = F2(function (message,times) {
-      var go = 100;
-      return $Html.text($String.trimRight(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message,"  ")))));
-   });
-   var pageHeader = A2($Html.h1,_U.list([]),_U.list([A2(title,"bingo!",3)]));
-   var view = A2($Html.div,_U.list([$Html$Attributes.id("container")]),_U.list([pageHeader,entryList(initialModel.entries),pageFooter]));
-   var main = view;
+   var view = function (model) {
+      return A2($Html.div,_U.list([$Html$Attributes.id("container")]),_U.list([pageHeader,entryList(model.entries),pageFooter]));
+   };
+   var main = view(A2(update,Sort,initialModel));
    return _elm.Bingo.values = {_op: _op
-                              ,title: title
-                              ,pageHeader: pageHeader
-                              ,pageFooter: pageFooter
                               ,entryItem: entryItem
                               ,newEntry: newEntry
                               ,entryList: entryList
                               ,initialModel: initialModel
+                              ,NoOp: NoOp
+                              ,Sort: Sort
+                              ,update: update
+                              ,title: title
+                              ,pageHeader: pageHeader
+                              ,pageFooter: pageFooter
                               ,view: view
                               ,main: main};
 };
