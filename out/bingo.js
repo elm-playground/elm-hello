@@ -10302,25 +10302,27 @@ Elm.Bingo.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $String = Elm.String.make(_elm);
    var _op = {};
-   var entry = {pharse: "Future-Proof",points: 100,wasSpoken: false,id: 1};
-   var cloneEntry = _U.update(entry,{points: 500,wasSpoken: true});
    var newEntry = F3(function (phrase,points,id) {    return {phrase: phrase,points: points,spoken: false,id: id};});
+   var initialModel = {entries: _U.list([A3(newEntry,"Doing Agile",200,2)
+                                        ,A3(newEntry,"In The Cloud",300,3)
+                                        ,A3(newEntry,"Future-Proof",100,4)
+                                        ,A3(newEntry,"Rock-Start Ninja",400,4)])};
    var entryItem = function (entry) {
       return A2($Html.li,
       _U.list([]),
       _U.list([A2($Html.span,_U.list([$Html$Attributes.$class("shrase")]),_U.list([$Html.text(entry.phrase)]))
-              ,A2($Html.span,_U.list([$Html$Attributes.$class("shrase")]),_U.list([$Html.text($Basics.toString(entry.points))]))]));
+              ,A2($Html.span,_U.list([$Html$Attributes.$class("points")]),_U.list([$Html.text($Basics.toString(entry.points))]))]));
    };
-   var entryList = A2($Html.ul,_U.list([]),_U.list([entryItem(A3(newEntry,"Future-Proof",100,1)),entryItem(A3(newEntry,"Future-Proof",200,2))]));
+   var entryList = function (entries) {    return A2($Html.ul,_U.list([]),A2($List.map,entryItem,entries));};
    var pageFooter = A2($Html.footer,
    _U.list([]),
    _U.list([A2($Html.a,_U.list([$Html$Attributes.href("https://google.com")]),_U.list([$Html.text("Jannine Weigel")]))]));
    var title = F2(function (message,times) {
       var go = 100;
-      return $Html.text($String.trimRight(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message," ")))));
+      return $Html.text($String.trimRight(A2($String.repeat,times,$String.toUpper(A2($Basics._op["++"],message,"  ")))));
    });
    var pageHeader = A2($Html.h1,_U.list([]),_U.list([A2(title,"bingo!",3)]));
-   var view = A2($Html.div,_U.list([$Html$Attributes.id("container")]),_U.list([pageHeader,entryList,pageFooter]));
+   var view = A2($Html.div,_U.list([$Html$Attributes.id("container")]),_U.list([pageHeader,entryList(initialModel.entries),pageFooter]));
    var main = view;
    return _elm.Bingo.values = {_op: _op
                               ,title: title
@@ -10329,8 +10331,7 @@ Elm.Bingo.make = function (_elm) {
                               ,entryItem: entryItem
                               ,newEntry: newEntry
                               ,entryList: entryList
-                              ,entry: entry
-                              ,cloneEntry: cloneEntry
+                              ,initialModel: initialModel
                               ,view: view
                               ,main: main};
 };
