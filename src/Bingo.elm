@@ -141,10 +141,17 @@ entryForm address model =
         [
             input [
                 Utils.onInput address UpdatePharseInput,
-                type' "text" ,placeholder "Pharse", value model.phraseInput, name "pharse", autofocus True] [],
+                type' "text" ,
+                placeholder "Phrase",
+                value model.phraseInput,
+                name "phrase",
+                autofocus True] [],
             input [
                 Utils.onInput address UpdatePointsInput,
-                type' "number" , placeholder "Points", value model.phraseInput, name "points"] [],
+                type' "number" ,
+                placeholder "Points",
+                value model.pointsInput,
+                name "points"] [],
             button [class "add"] [text "Add"],
             h2  []
                 [text (model.phraseInput ++ " " ++ model.pointsInput)]

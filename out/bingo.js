@@ -10397,16 +10397,16 @@ Elm.Bingo.make = function (_elm) {
       _U.list([A2($Html.input,
               _U.list([A2($BingoUtils.onInput,address,UpdatePharseInput)
                       ,$Html$Attributes.type$("text")
-                      ,$Html$Attributes.placeholder("Pharse")
+                      ,$Html$Attributes.placeholder("Phrase")
                       ,$Html$Attributes.value(model.phraseInput)
-                      ,$Html$Attributes.name("pharse")
+                      ,$Html$Attributes.name("phrase")
                       ,$Html$Attributes.autofocus(true)]),
               _U.list([]))
               ,A2($Html.input,
               _U.list([A2($BingoUtils.onInput,address,UpdatePointsInput)
                       ,$Html$Attributes.type$("number")
                       ,$Html$Attributes.placeholder("Points")
-                      ,$Html$Attributes.value(model.phraseInput)
+                      ,$Html$Attributes.value(model.pointsInput)
                       ,$Html$Attributes.name("points")]),
               _U.list([]))
               ,A2($Html.button,_U.list([$Html$Attributes.$class("add")]),_U.list([$Html.text("Add")]))
