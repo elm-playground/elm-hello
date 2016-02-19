@@ -1,76 +1,138 @@
-module Bingo (..) where
+module Bingo where
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+
 import String exposing (toUpper, repeat, trimRight)
+
 import StartApp.Simple as StartApp
 
+
 -- MODEL
-entryItem entry =
-    li [ ]
-        [ span [class "shrase"] [text entry.phrase],
-          span [class "points"] [text (toString entry.points)]]
 
 newEntry phrase points id =
-    { phrase = phrase, points = points, spoken = False, id = id }
+  { phrase = phrase,
+    points = points,
+    wasSpoken = False,
+    id = id
+  }
 
-entryList entries =
-    ul [] (List.map entryItem entries)
 
 initialModel =
-    { entries =
-        [ newEntry "Doing Agile" 200 2,
-          newEntry "In The Cloud" 300 3,
-          newEntry "Future-Proof" 100 4,
-          newEntry "Rock-Start Ninja" 4 0 ]}
+  { entries =
+      [ newEntry "Doing Agile" 200 2,
+        newEntry "In The Cloud" 300 3,
+        newEntry "Future-Proof" 100 1,
+        newEntry "Rock-Star Ninja" 400 4
+      ]
+  }
+
 
 -- UPDATE
+
 type Action
-    = NoOp
-    | Sort
+  = NoOp
+  | Sort
+  | Delete Int
+  | Mark Int
+
 
 update action model =
-    case action of
-        NoOp ->
-            model
-        Sort ->
-            { model | entries = List.sortBy .points model.entries }
+  case action of
+    NoOp ->
+      model
+
+    Sort ->
+      { model | entries = List.sortBy .points model.entries }
+
+    Delete id ->
+      let
+        remainingEntries =
+          List.filter (\e -> e.id /= id) model.entries
+      in
+        { model | entries = remainingEntries }
+
+    Mark id ->
+      let
+        updateEntry e =
+          if e.id == id then { e | wasSpoken = (not e.wasSpoken) } else e
+      in
+        { model | entries = List.map updateEntry model.entries }
+
 
 -- VIEW
+
 title message times =
-  let go = 100 in
-    message
-      ++ "  "
-      |> toUpper
-      |> repeat times
-      |> trimRight
-      |> text
+  message ++ " "
+    |> toUpper
+    |> repeat times
+    |> trimRight
+    |> text
 
 
-pageHeader = h1 [] [ title "bingo!" 3 ]
+pageHeader =
+  h1 [ ] [ title "bingo!" 3 ]
+
 
 pageFooter =
-  footer
-    []
-    [ a [ href "https://google.com" ]
-        [ text "Jannine Weigel" ]]
+  footer [ ]
+    [ a [ href "https://pragmaticstudio.com" ]
+        [ text "The Pragmatic Studio" ]
+    ]
+
+
+entryItem address entry =
+  li
+    [ classList [ ("highlight", entry.wasSpoken) ],
+      onClick address (Mark entry.id)
+    ]
+    [ span [ class "phrase" ] [ text entry.phrase ],
+      span [ class "points" ] [ text (toString entry.points) ],
+      button
+        [ class "delete", onClick address (Delete entry.id) ]
+        [ ]
+    ]
+
+
+entryList address entries =
+  let
+    entryItems = List.map (entryItem address) entries
+    items = entryItems ++ [totalItem (totalPoints entries)]
+  in
+    ul [ ] items
+
+totalPoints entries =
+    let
+        spokenEntries = List.filter .wasSpoken entries
+    in
+        List.map .points spokenEntries
+        |> List.sum
+
+totalItem total =
+    li
+        [ class "total" ]
+        [ span [class "label"] [text "Total"],
+          span [class "points"] [text (toString total)] ]
+
 view address model =
   div [ id "container" ]
     [ pageHeader,
-      entryList model.entries ,
+      entryList address model.entries,
       button
-        [class "sort", onClick address Sort] [text "Sort"],
-      pageFooter ]
+        [ class "sort", onClick address Sort ]
+        [ text "Sort" ],
+      pageFooter
+    ]
 
--- WIRE IT ALL TOGATHER
+
+-- WIRE IT ALL TOGETHER!
+
 main =
-  --view (update Sort initialModel)
-  {-
-  initialModel
-    |> update Sort
-    |> view
-  -}
   StartApp.start
-    { model = initialModel, view = view, update = update }
+    { model = initialModel,
+      view = view,
+      update = update
+    }
+
 
